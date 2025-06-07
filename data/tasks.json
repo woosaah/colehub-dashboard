@@ -1,0 +1,8 @@
+{
+  "tasks": [
+    { "id": "task1", "name": "Make your bed" },
+    { "id": "task2", "name": "Eat breakfast" },
+    { "id": "task3", "name": "Brush your teeth" },
+    { "id": "task4", "name": "Check the schedule" }
+  ]
+}
