@@ -1,33 +1,46 @@
-const express = require('express');
+const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const app = express();
 const PORT = 3000;
 
-// Serve all files in the current directory and subfolders
-app.use(express.static(__dirname));
+const server = http.createServer((req, res) => {
+  console.log(`Request for ${req.url}`);
 
-// API: Get tasks
-app.get('/api/tasks', (req, res) => {
-  fs.readFile(path.join(__dirname, 'data', 'tasks.json'), 'utf8', (err, data) => {
-    if (err) return res.status(500).json({ error: 'Could not read tasks' });
-    res.json(JSON.parse(data));
+  let filePath = '';
+  let contentType = 'text/html';
+
+  if (req.url === '/' || req.url === '/index.html') {
+    filePath = path.join(__dirname, 'index.html');
+  } else if (req.url === '/main.js') {
+    filePath = path.join(__dirname, 'main.js');
+    contentType = 'application/javascript';
+  } else if (req.url === '/api/tasks') {
+    fs.readFile(path.join(__dirname, 'data', 'tasks.json'), 'utf8', (err, data) => {
+      if (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Could not read tasks' }));
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      return res.end(data);
+    });
+    return;
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    return res.end('404 Not Found');
+  }
+
+  fs.readFile(filePath, (err, content) => {
+    if (err) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end('Server Error');
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': contentType });
+    res.end(content);
   });
 });
 
-// API: Save tasks
-app.post('/api/tasks', express.json(), (req, res) => {
-  fs.writeFile(
-    path.join(__dirname, 'data', 'tasks.json'),
-    JSON.stringify(req.body, null, 2),
-    (err) => {
-      if (err) return res.status(500).json({ error: 'Could not write tasks' });
-      res.json({ message: 'Tasks updated' });
-    }
-  );
-});
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
