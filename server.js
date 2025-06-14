@@ -7,15 +7,23 @@ const PORT = 3000;
 const server = http.createServer((req, res) => {
   console.log(`Request for ${req.url}`);
 
-  let filePath = '';
-  let contentType = 'text/html';
+  let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+  const extname = path.extname(filePath).toLowerCase();
 
-  if (req.url === '/' || req.url === '/index.html') {
-    filePath = path.join(__dirname, 'index.html');
-  } else if (req.url === '/main.js') {
-    filePath = path.join(__dirname, 'main.js');
-    contentType = 'application/javascript';
-  } else if (req.url === '/api/tasks') {
+  const mimeTypes = {
+    '.html': 'text/html',
+    '.js': 'application/javascript',
+    '.css': 'text/css',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpg',
+    '.gif': 'image/gif'
+  };
+
+  const contentType = mimeTypes[extname] || 'application/octet-stream';
+
+  // Handle /api/tasks manually
+  if (req.url === '/api/tasks') {
     fs.readFile(path.join(__dirname, 'data', 'tasks.json'), 'utf8', (err, data) => {
       if (err) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -25,15 +33,12 @@ const server = http.createServer((req, res) => {
       return res.end(data);
     });
     return;
-  } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    return res.end('404 Not Found');
   }
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
-      res.writeHead(500, { 'Content-Type': 'text/plain' });
-      res.end('Server Error');
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('404 Not Found');
       return;
     }
     res.writeHead(200, { 'Content-Type': contentType });
