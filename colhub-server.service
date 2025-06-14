@@ -1,0 +1,14 @@
+[Unit]
+Description=ColeHub Node Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /home/colle/colehub/index.js
+WorkingDirectory=/home/colle/colehub
+Restart=always
+User=colle
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
