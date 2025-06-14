@@ -2,7 +2,7 @@ fetch('data/tasks.json')
   .then(res => res.json())
   .then(data => {
     const taskList = document.getElementById('task-list');
-    data.tasks.forEach(task => {
+    data.forEach(task => {
       const li = document.createElement('li');
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
