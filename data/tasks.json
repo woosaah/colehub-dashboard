@@ -1,8 +1,17 @@
-{
-  "tasks": [
-    { "id": "task1", "name": "Make your bed" },
-    { "id": "task2", "name": "Eat breakfast" },
-    { "id": "task3", "name": "Brush your teeth" },
-    { "id": "task4", "name": "Check the schedule" }
-  ]
-}
+[
+  {
+    "id": 1,
+    "text": "Brush teeth",
+    "done": false
+  },
+  {
+    "id": 2,
+    "text": "Eat breakfast",
+    "done": false
+  },
+  {
+    "id": 3,
+    "text": "Empty dishwasher",
+    "done": false
+  }
+]
