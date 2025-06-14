@@ -18,3 +18,6 @@ Type=Application
 Name=ColeHub Kiosk
 Exec=chromium-browser --kiosk --app=http://localhost:3000
 X-GNOME-Autostart-enabled=true
+
+#executable update-colehub
+chmod +x /home/colle/update-colehub.sh
