@@ -1,13 +1,9 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-
-const PORT = 3000;
-
 const server = http.createServer((req, res) => {
   console.log(`Request for ${req.url}`);
 
   let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+
+  // Determine content type by file extension
   const extname = path.extname(filePath).toLowerCase();
 
   const mimeTypes = {
@@ -16,13 +12,14 @@ const server = http.createServer((req, res) => {
     '.css': 'text/css',
     '.json': 'application/json',
     '.png': 'image/png',
-    '.jpg': 'image/jpg',
-    '.gif': 'image/gif'
+    '.jpg': 'image/jpeg',
+    '.gif': 'image/gif',
+    // add more mime types as needed
   };
 
-  const contentType = mimeTypes[extname] || 'application/octet-stream';
+  let contentType = mimeTypes[extname] || 'application/octet-stream';
 
-  // Handle /api/tasks manually
+  // Special case: API endpoint
   if (req.url === '/api/tasks') {
     fs.readFile(path.join(__dirname, 'data', 'tasks.json'), 'utf8', (err, data) => {
       if (err) {
@@ -35,6 +32,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // Serve static files
   fs.readFile(filePath, (err, content) => {
     if (err) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -44,8 +42,4 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': contentType });
     res.end(content);
   });
-});
-
-server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
 });
