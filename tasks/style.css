@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+  padding: 1rem;
+}
+
+li {
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background: #eee;
+  border-radius: 5px;
+}
+
+li.done {
+  text-decoration: line-through;
+  background: #cfc;
+}
