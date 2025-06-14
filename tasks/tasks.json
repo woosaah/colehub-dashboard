@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "text": "Brush teeth",
+    "done": false
+  },
+  {
+    "id": 2,
+    "text": "Eat breakfast",
+    "done": false
+  },
+  {
+    "id": 3,
+    "text": "Empty dishwasher",
+    "done": false
+  }
+]
