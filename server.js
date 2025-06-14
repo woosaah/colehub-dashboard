@@ -32,7 +32,26 @@ const server = http.createServer((req, res) => {
     res.end(content);
   });
 });
+// Get tasks
+app.get('/api/tasks', (req, res) => {
+  fs.readFile(path.join(__dirname, '../data/tasks.json'), 'utf8', (err, data) => {
+    if (err) {
+      return res.status(500).json({ error: 'Could not read tasks' });
+    }
+    res.json(JSON.parse(data));
+  });
+});
 
+// Update tasks
+app.post('/api/tasks', express.json(), (req, res) => {
+  const updatedTasks = req.body;
+  fs.writeFile(path.join(__dirname, '../data/tasks.json'), JSON.stringify(updatedTasks, null, 2), (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Could not write tasks' });
+    }
+    res.json({ message: 'Tasks updated' });
+  });
+});
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
