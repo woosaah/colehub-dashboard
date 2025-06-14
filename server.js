@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+
 const server = http.createServer((req, res) => {
   console.log(`Request for ${req.url}`);
 
@@ -17,7 +18,6 @@ const server = http.createServer((req, res) => {
     '.png': 'image/png',
     '.jpg': 'image/jpeg',
     '.gif': 'image/gif',
-    // add more mime types as needed
   };
 
   let contentType = mimeTypes[extname] || 'application/octet-stream';
@@ -45,4 +45,10 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': contentType });
     res.end(content);
   });
+});
+
+// ✅ Start the server
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
